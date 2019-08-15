@@ -64,6 +64,7 @@ public class CachedRealm extends AbstractExtendableRevisioned {
     protected boolean resetPasswordAllowed;
     protected boolean identityFederationEnabled;
     protected boolean editUsernameAllowed;
+    protected boolean userDeleteOwnAccountAllowed;
     //--- brute force settings
     protected boolean bruteForceProtected;
     protected boolean permanentLockout;
@@ -179,6 +180,7 @@ public class CachedRealm extends AbstractExtendableRevisioned {
         resetPasswordAllowed = model.isResetPasswordAllowed();
         identityFederationEnabled = model.isIdentityFederationEnabled();
         editUsernameAllowed = model.isEditUsernameAllowed();
+        userDeleteOwnAccountAllowed = model.isUserDeleteOwnAccountAllowed();
         //--- brute force settings
         bruteForceProtected = model.isBruteForceProtected();
         permanentLockout = model.isPermanentLockout();
@@ -728,5 +730,9 @@ public class CachedRealm extends AbstractExtendableRevisioned {
 
     public boolean isAllowUserManagedAccess() {
         return allowUserManagedAccess;
+    }
+
+    public boolean isUserDeleteOwnAccountAllowed() {
+        return userDeleteOwnAccountAllowed;
     }
 }
