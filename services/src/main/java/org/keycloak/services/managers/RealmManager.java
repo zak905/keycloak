@@ -120,8 +120,6 @@ public class RealmManager {
         createDefaultClientScopes(realm);
         setupAuthorizationServices(realm);
         setupClientRegistrations(realm);
-        setupDeleteOwnAccountRole(realm);
-        addDeleteOwnAccountAttribute(realm);
 
         fireRealmPostCreate(realm);
 
@@ -600,9 +598,6 @@ public class RealmManager {
             MigrationModelManager.migrateImport(session, realm, rep, skipUserDependent);
         }
 
-        setupDeleteOwnAccountRole(realm);
-        addDeleteOwnAccountAttribute(realm);
-
         fireRealmPostCreate(realm);
 
         return realm;
@@ -717,18 +712,6 @@ public class RealmManager {
 
     private void setupClientRegistrations(RealmModel realm) {
         DefaultClientRegistrationPolicies.addDefaultPolicies(realm);
-    }
-
-
-    private void setupDeleteOwnAccountRole(RealmModel realm) {
-        if (!realm.getRoles().stream().filter(role -> Objects.equals(role.getName(), AccountRoles.DELETE_ACCOUNT)).findFirst().isPresent() ){
-            RoleModel model = realm.addRole(AccountRoles.DELETE_ACCOUNT);
-            model.setDescription("${delete-own-account}");
-        }
-    }
-
-    private void addDeleteOwnAccountAttribute(RealmModel realm) {
-        realm.setAttribute(Constants.ALLOW_DELETE_OWN_ACCOUNT_ATTRIBUTE, false);
     }
 
     private void fireRealmPostCreate(RealmModel realm) {
