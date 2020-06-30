@@ -19,6 +19,7 @@ import {Route, Switch} from 'react-router-dom';
 import {NavItem, NavExpandable} from '@patternfly/react-core';
 import {Msg} from './widgets/Msg';
 import {PageNotFound} from './content/page-not-found/PageNotFound';
+import { AppInitiatedActionPage } from './content/aia-page/AppInitiatedActionPage';
 
 export interface ContentItem {
     id?: string;
@@ -167,6 +168,7 @@ export function makeRoutes(): React.ReactNode {
 
     return (<Switch>
                 {routes}
+                <Route exact path={'/aia'} component={AppInitiatedActionPage}/>
                 <Route component={PageNotFound}/>
             </Switch>);
 }

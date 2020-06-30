@@ -4,10 +4,12 @@ import org.jboss.logging.Logger;
 import org.jboss.resteasy.annotations.cache.NoCache;
 import org.keycloak.common.Version;
 import org.keycloak.events.EventStoreProvider;
+import org.keycloak.models.AccountRoles;
 import org.keycloak.models.ClientModel;
 import org.keycloak.models.Constants;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
+import org.keycloak.models.RequiredActionProviderModel;
 import org.keycloak.models.UserModel;
 import org.keycloak.protocol.oidc.utils.RedirectUtils;
 import org.keycloak.services.Urls;
@@ -35,6 +37,7 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 import java.util.Scanner;
 import java.util.function.Function;
@@ -126,13 +129,15 @@ public class AccountConsole {
             }
             map.put("isTotpConfigured", isTotpConfigured);
 
+            map.put("deleteAccountAllowed", isDeleteAccountAllowed());
+
             FreeMarkerUtil freeMarkerUtil = new FreeMarkerUtil();
             String result = freeMarkerUtil.processTemplate(map, "index.ftl", theme);
             Response.ResponseBuilder builder = Response.status(Response.Status.OK).type(MediaType.TEXT_HTML_UTF_8).language(Locale.ENGLISH).entity(result);
             return builder.build();
         }
     }
-    
+
     private Map<String, String> supportedLocales(Properties messages) throws IOException {
         Map<String, String> supportedLocales = new HashMap<>();
         for (String l : realm.getSupportedLocales()) {
@@ -174,6 +179,11 @@ public class AccountConsole {
         }
 
         return propertyValue;
+    }
+
+    private boolean isDeleteAccountAllowed() {
+        RequiredActionProviderModel deleteAction = realm.getRequiredActionProviderByAlias("delete_account");
+        return Objects.nonNull(realm.getClientByClientId(Constants.ACCOUNT_MANAGEMENT_CLIENT_ID).getRole(AccountRoles.DELETE_ACCOUNT)) && Objects.nonNull(deleteAction) && deleteAction.isEnabled();
     }
     
     @GET
