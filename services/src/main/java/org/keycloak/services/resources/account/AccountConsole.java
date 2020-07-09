@@ -138,7 +138,6 @@ public class AccountConsole {
             return builder.build();
         }
     }
-
     private Map<String, String> supportedLocales(Properties messages) throws IOException {
         Map<String, String> supportedLocales = new HashMap<>();
         for (String l : realm.getSupportedLocales()) {
