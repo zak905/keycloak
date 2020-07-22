@@ -29,10 +29,14 @@ import org.keycloak.services.ForbiddenException;
 public class UserHelper {
 
   public static boolean hasDeleteAccountRole(UserModel user) {
-    return Objects.nonNull(user.getRoleMappings()) && user.getRoleMappings().stream().anyMatch((role) -> Objects.equals(role.getName(), Constants.DELETE_ACCOUNT_ROLE));
+    System.out.println("1==========================================================");
+
+    System.out.println("2==========================================================");
+    return Objects.nonNull(user) && Objects.nonNull(user.getRoleMappings()) && user.getRoleMappings().stream().filter(Objects::nonNull).anyMatch((role) -> Objects.equals(role.getName(), Constants.DELETE_ACCOUNT_ROLE));
   }
 
   public static boolean isDeleteAccountAllowed(RealmModel realm, UserModel user) {
+    System.out.println("3========================================================== " + Objects.isNull(user));
     RequiredActionProviderModel deleteAction = realm.getRequiredActionProviderByAlias("delete_account");
     return hasDeleteAccountRole(user) && Objects.nonNull(deleteAction) && deleteAction.isEnabled();
   }
